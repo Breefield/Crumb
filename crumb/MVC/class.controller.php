@@ -45,14 +45,16 @@ class controller extends crumbMVC {
      * property name
      * @param string $model The name of the model
      */
-    public function load($model) {
+    public function load($model, $name = null) {
         global $APP_MODELS;
         try {
             /* Include the model first */
             $this->includeModel($model, $APP_MODELS, true);
             $model = $this->getPieceName($model);
             /* Then instantiate it */
-            $this->$model = new $model;
+            if($name == null) $name = $model;
+            else $name = $name;
+            $this->$name = new $model;
         } catch(Exception $e) {
             throw $e;
         }

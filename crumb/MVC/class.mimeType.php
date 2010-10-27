@@ -89,10 +89,17 @@ class mimeType {
             $mimetype = finfo_file($finfo, $filename);
             finfo_close($finfo);
             return $mimetype;
+        } elseif(function_exists('system')) {
+            $type = system(trim('file -bi '.escapeshellarg($f)));
+            return $type;
         } else {
             /* Otherwise, let the browser guess */
             return 'application/octet-stream';
         }
+    }
+    
+    public function isTextType($type) {
+        return in_array($type, array('text/html', 'text/css', 'application/javascript'));
     }
 }
 ?>

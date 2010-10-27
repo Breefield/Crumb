@@ -228,7 +228,8 @@ class crumbMVC {
                 /* read the file off, this prevents against the browser
                  * prompting a download
                  */
-                readfile($file);
+                if(!mimeType::isTextType($mime_type)) readfile($file);
+                else require_once($file);
                 exit();
             }
         }
