@@ -13,9 +13,6 @@ class controller extends crumbMVC {
     /* The view class we'll have attached at our controller's hip */
     private $view; 
     
-    /* Was this controller cleared */
-    private $cleared;
-    
     /* __construct
      * When the class fires up we want to show any layout stuff right off
      */
@@ -33,28 +30,25 @@ class controller extends crumbMVC {
      * This is the function crumbMVC calls after it calls the action method
      */
     public function __tail() {
-        if(isset($this->layout_bottom) && !$this->cleared) {
+        if(isset($this->layout_bottom)) {
             /* If there are bottom layouts to show, show them */
             $this->view->loadLayout($this->layout_bottom, $this->layout_vars);
         }
-        if(!$this->cleared) $this->view->showSaved();
     }
-
+     
     /* load
      * load a new model and instantiate it with the name of the model as the 
      * property name
      * @param string $model The name of the model
      */
-    public function load($model, $name = null) {
+    public function load($model) {
         global $APP_MODELS;
         try {
             /* Include the model first */
             $this->includeModel($model, $APP_MODELS, true);
             $model = $this->getPieceName($model);
             /* Then instantiate it */
-            if($name == null) $name = $model;
-            else $name = $name;
-            $this->$name = new $model;
+            $this->$model = new $model;
         } catch(Exception $e) {
             throw $e;
         }
@@ -66,29 +60,8 @@ class controller extends crumbMVC {
      * @param array $vars The variables we want to acces in our view
      */
     protected function show($view, $vars = null) {
-        $this->view->saveVariables($vars);
-        $this->view->save($view);
-    }
-    
-    protected function run($controller, $paramaters = null, $action = '__index') {
-        $this->view->clearSaved();
-        $this->cleared = true;
-       
-        $route_exists = true;
-        if(!$this->controllerExists($controller) || 
-           !$this->actionExists($controller, $action)) {
-            $route_exists = false;
-        }
-        /* If the route doesn't exist, and we're in production mode show the 404
-         * controller
-         */
-        if(!$route_exists && CRUMB_MODE) {
-            $controller = CONTROLLER_404;
-            $action = ACTION_404;
-        }
-        /* Include and load our controller / action with the paramaters in tow */
-        $this->includeController($controller);
-        $this->loadController($controller, $action, $paramaters);
+        $this->view->setVariables($vars);
+        $this->view->load($view);
     }
 }
 ?>

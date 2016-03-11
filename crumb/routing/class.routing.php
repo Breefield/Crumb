@@ -23,6 +23,8 @@ class routing {
 
     /* The URI exploded by DS */
     private $path;
+    /* The request URI */
+    public $request;
     /* Where is the routs file located your our app */
     private $routes_file;
     /* The paramaters end of the URI */
@@ -70,6 +72,7 @@ class routing {
         }
         /* Get that route back from $routeAndParams */
         $break_URI = $routeAndParams[0];
+        $this->request = $break_URI;
         if(is_array($routes)) {
             foreach($routes as $alias => $route) {
                 /* For all the routes in routes.php find the aliases

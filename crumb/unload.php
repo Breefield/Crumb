@@ -4,8 +4,6 @@
  * Copyleft: Dustin Hoffman, 2009
  * Contact:  dustin.hoffman@breefield.com
  */
- 
- session_start();
 
 /* Basic package for including controller, model, and view classes */
 require_once('MVC/class.crumbMVC.php');
@@ -25,12 +23,15 @@ define('BUILD_ROOT', FS_ROOT.trim(BASE_URL, DS));
 define('APP_BUILD_ROOT', FS_ROOT.trim(BASE_URL.DS, DS).DS.trim(APP_ROOT, DS));
 /* If you need to call something from the root of your appliction space */
 function root() { return rtrim(ROOT.trim(BASE_URL, DS), DS).DS; }
+function assets() { return root().'assets/'; }
 
 /* Create a routing object and pass it our URI so we can get the controller
  * action, and paramaters passed in our URI
  */
 $routing = new routing(APP_BUILD_ROOT);
 $route = $routing->breakURI($_SERVER['REQUEST_URI'], BUILD_URI);
+define('REQUEST', $routing->request);
+function self() { return root().trim(REQUEST, DS); }
 $controller = $routing->getControllerName();
 $action = $routing->getActionName();
 $paramaters = $routing->getParamaters();
@@ -42,7 +43,6 @@ try {
      * file)
      */
     $crumb_mvc->loadSupport($route);
-    
     /* Check to see if the route passed in the URI actually pertains to files
      * that exist in our app
      */
@@ -51,6 +51,7 @@ try {
        !$crumb_mvc->actionExists($controller, $action)) {
         $route_exists = false;
     }
+
     /* If the route doesn't exist, and we're in production mode show the 404
      * controller
      */
@@ -62,7 +63,6 @@ try {
     $crumb_mvc->includeController($controller);
     $crumb_mvc->loadController($controller, $action, $paramaters);
 } catch(Exception $e) {
-    
     /* This is the error output section of CRUMB, feel free to change
      * FUTURE ADDITION: Log to file in CRUMB directory
      */
