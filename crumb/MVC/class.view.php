@@ -16,30 +16,6 @@ class view extends crumbMVC {
     private $crumb_var_names = array('APP_CONTROLLERS',
                                           'APP_MODELS',
                                           'APP_VIEWS');
-    private $views = array();
-    private $vars = array();
-    
-    public function save($view) {
-        $this->views[] = $view;
-    }
-    
-    public function saveVariables($vars) {
-        $this->vars[] = $vars;
-    }
-    
-    public function showSaved() {
-        foreach($this->vars as $vars) {
-            $this->setVariables($vars);
-        }
-        foreach($this->views as $view) {
-            $this->load($view);
-        }
-    }
-    
-    public function clearSaved() {
-        $this->views = array();
-        $this->vars = array();
-    }
     
     /* load
      * load up a view
@@ -73,8 +49,8 @@ class view extends crumbMVC {
     public function loadLayout($layout, $vars) {
         if(!empty($layout)) {
             foreach($layout as $file) {
-                $this->saveVariables($vars);
-                $this->save($file);
+                $this->setVariables($vars);
+                $this->load($file);
             }
         }
     }

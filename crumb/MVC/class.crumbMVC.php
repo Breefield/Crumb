@@ -35,13 +35,13 @@ class crumbMVC {
         /* Find controllers, models, and views if applicable */
         if($scan_controllers) {
             $this->scrubTree(APP_BUILD_ROOT.DS.'controllers', 
-                             &$APP_CONTROLLERS);
+                             $APP_CONTROLLERS);
         }
         if($scan_models) {
-            $this->scrubTree(APP_BUILD_ROOT.DS.'models', &$APP_MODELS, '/');
+            $this->scrubTree(APP_BUILD_ROOT.DS.'models', $APP_MODELS, '/');
         }
         if($scan_views) {
-            $this->scrubTree(APP_BUILD_ROOT.DS.'views', &$APP_VIEWS, '/');
+            $this->scrubTree(APP_BUILD_ROOT.DS.'views', $APP_VIEWS, '/');
         }
     }
     
@@ -99,6 +99,7 @@ class crumbMVC {
         /* The filename based on the piece name */ 
         $file = trim($piece, DS);
         /* If the file name is a key in the $PIECES array */
+
         if(in_array($file, array_keys($PIECES))) {
             /* Then the actual file path we're looking for becomes apparent,
              * require it
@@ -206,6 +207,7 @@ class crumbMVC {
         /* $file will be an array because it should have been processed by the
          * routing class
          */
+
         if(is_array($file)) {
             /* Build the actual file name from the array */
             $file_name = '';
@@ -228,8 +230,7 @@ class crumbMVC {
                 /* read the file off, this prevents against the browser
                  * prompting a download
                  */
-                if(!mimeType::isTextType($mime_type)) readfile($file);
-                else require_once($file);
+                readfile($file);
                 exit();
             }
         }
@@ -254,11 +255,11 @@ class crumbMVC {
                 /* If it is, and it's not hidden */
                 if(!empty($path)) {
                     /* Recursive call, adding to the $path */
-                    $this->scrubTree($dir_path, &$store, 
+                    $this->scrubTree($dir_path, $store, 
                                      trim($path.DS.$dir_name, DS));
                 } else {
                     /* Recursive call, ignoring the $path */
-                    $this->scrubTree($dir_path, &$store, $sdir);
+                    $this->scrubTree($dir_path, $store, $sdir);
                 }
             }
             /* If it's a file, not a directory */

@@ -3,7 +3,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 /* Leave this empty if you'll be developing from the root of your website
  * or webapp.
  */
-define('BASE_URL', '');
+define('BASE_URL', 'bm-timelapse');
 
 /* This is where *your* folders and files sit, leave it blank if they are
  * directly adjacent to CRUMB_DIR 
@@ -35,7 +35,11 @@ define('CONTROLLER_404', 'index');
 define('ACTION_404', 'is404');
 
 /* Error display mode */
-define('CRUMB_MODE', 0);
+define('CRUMB_MODE', 1);
+error_reporting(E_ALL);
+
+/* Include Path */
+set_include_path(get_include_path().PATH_SEPARATOR.'./'.PATH_SEPARATOR.'./'.APP_ROOT);
 
 /* This brings everything together */
 require_once(CRUMB_DIR.'/unload.php');
